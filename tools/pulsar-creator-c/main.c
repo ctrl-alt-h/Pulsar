@@ -128,14 +128,16 @@ static void replace_token(char** text, const char* token, const char* repl){
 int main(int argc, char** argv){
     const char *track_dir=NULL, *mod_name="PulsarPack", *output_dir="output", *date=NULL;
     int wiimmfi_region=0;
+    int auto_bmg_from_filenames=0;
     for(int i=1;i<argc;i++){
         if(!strcmp(argv[i],"--track-dir") && i+1<argc) track_dir=argv[++i];
         else if(!strcmp(argv[i],"--mod-name") && i+1<argc) mod_name=argv[++i];
         else if(!strcmp(argv[i],"--output-dir") && i+1<argc) output_dir=argv[++i];
         else if(!strcmp(argv[i],"--wiimmfi-region") && i+1<argc) wiimmfi_region=atoi(argv[++i]);
         else if(!strcmp(argv[i],"--date") && i+1<argc) date=argv[++i];
+        else if(!strcmp(argv[i],"--auto-bmg-from-filenames")) auto_bmg_from_filenames=1;
         else if(!strcmp(argv[i],"--help")){
-            printf("Usage: pulsar-creator --track-dir <dir> [--mod-name name] [--output-dir dir] [--wiimmfi-region n] [--date yyyy-mm-dd]\n");
+            printf("Usage: pulsar-creator --track-dir <dir> [--mod-name name] [--output-dir dir] [--wiimmfi-region n] [--date yyyy-mm-dd] [--auto-bmg-from-filenames]\n");
             return 0;
         }
     }
@@ -176,13 +178,18 @@ int main(int argc, char** argv){
     if(!ffiles||!fbmg){ fprintf(stderr,"Failed to create temp files\n"); return 1; }
     fprintf(ffiles,"FILE\n");
 
-    char* bmg_template=NULL;
-    if(read_text("PulsarPackCreator/Resources/BMG.txt", &bmg_template)!=0){ fprintf(stderr,"Missing BMG template\n"); return 1; }
-    replace_token(&bmg_template,"{CC}","100");
-    replace_token(&bmg_template,"{date}",date);
-    fputs(bmg_template, fbmg);
-    fputs("\n", fbmg);
-    free(bmg_template);
+    if(auto_bmg_from_filenames){
+        fprintf(fbmg,"#BMG\n\n");
+        fprintf(fbmg,"  2847    = Version created %s\n\n", date);
+    } else {
+        char* bmg_template=NULL;
+        if(read_text("PulsarPackCreator/Resources/BMG.txt", &bmg_template)!=0){ fprintf(stderr,"Missing BMG template\n"); return 1; }
+        replace_token(&bmg_template,"{CC}","100");
+        replace_token(&bmg_template,"{date}",date);
+        fputs(bmg_template, fbmg);
+        fputs("\n", fbmg);
+        free(bmg_template);
+    }
 
     size_t track_count = szs.n;
     size_t cup_count = track_count / 4;

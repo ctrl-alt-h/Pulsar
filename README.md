@@ -59,6 +59,8 @@ A native C command-line port of the pack builder is now available in `tools/puls
 cmake -S tools/pulsar-creator-c -B build/pulsar-creator-c
 cmake --build build/pulsar-creator-c
 ./build/pulsar-creator-c/pulsar-creator --track-dir /path/to/szs/files
+# optional: generate a minimal BMG directly from .szs filenames
+./build/pulsar-creator-c/pulsar-creator --track-dir /path/to/szs/files --auto-bmg-from-filenames
 ```
 
 This avoids the WPF/Wine dependency path and is intended for Linux workflows.

@@ -21,7 +21,8 @@ cmake --build build/pulsar-creator-c
 - `--mod-name <name>`: Pack folder name (default: `PulsarPack`).
 - `--output-dir <dir>`: Output parent directory (default: `output`).
 - `--wiimmfi-region <n>`: Wiimmfi region ID for config info (default: `0`).
-- `--date <yyyy-mm-dd>`: Date text injected in BMG template.
+- `--date <yyyy-mm-dd>`: Date text injected in BMG/template metadata.
+- `--auto-bmg-from-filenames`: Build a minimal BMG text from discovered `.szs` filenames (without extensions) for track names.
 
 ## Notes
 
