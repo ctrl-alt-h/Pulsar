@@ -29,3 +29,8 @@ cmake --build build/pulsar-creator-c
 - Track files are sorted alphabetically and grouped into cups of 4.
 - The tool copies Pulsar resource binaries/assets from `PulsarPackCreator/Resources`.
 - `wbmgt` (Wiimm's SZS tools) must be installed and available in `PATH`.
+
+
+### Troubleshooting
+
+If you see `Missing generated bmg` errors, make sure `wbmgt` is installed and in `PATH`. The tool calls `wbmgt encode` to produce the binary BMG section.

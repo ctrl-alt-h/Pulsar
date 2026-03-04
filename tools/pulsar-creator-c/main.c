@@ -212,10 +212,10 @@ int main(int argc, char** argv){
     fclose(fbmg); fclose(ffiles);
 
     char cmd[1400];
-    snprintf(cmd,sizeof(cmd),"wbmgt encode \"%s\" > /dev/null 2>&1", bmg_txt);
+    snprintf(cmd,sizeof(cmd),"wbmgt encode \"%s\" --dest \"%s\" > /dev/null 2>&1", bmg_txt, bmg_bmg);
     if(system(cmd)!=0){
 #ifdef _WIN32
-        snprintf(cmd,sizeof(cmd),"wbmgt encode \"%s\" > NUL 2>&1", bmg_txt);
+        snprintf(cmd,sizeof(cmd),"wbmgt encode \"%s\" --dest \"%s\" > NUL 2>&1", bmg_txt, bmg_bmg);
         if(system(cmd)!=0){
 #endif
             fprintf(stderr,"wbmgt failed. Install Wiimm's SZS tools and ensure 'wbmgt' is in PATH.\n");
@@ -275,7 +275,7 @@ int main(int argc, char** argv){
         be16(out,(uint16_t)idx);
     }
 
-    FILE* in=fopen(bmg_bmg,"rb"); if(!in){ fprintf(stderr,"Missing generated bmg.bmg\n"); return 1; }
+    FILE* in=fopen(bmg_bmg,"rb"); if(!in){ fprintf(stderr,"Missing generated bmg file at %s\n", bmg_bmg); return 1; }
     char io[1<<15]; size_t n;
     while((n=fread(io,1,sizeof(io),in))>0) fwrite(io,1,n,out);
     fclose(in);
